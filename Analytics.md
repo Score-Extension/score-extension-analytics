@@ -1,9 +1,8 @@
 # Score Extension Analytics
 
-This file tracks all existing analytics that exist in the [Score browser extension](https://getscore.app). 
+This file tracks all existing analytics that exist in the [Score browser extension](https://getscore.app), as of version 1.9.0 on the Chrome store. 
 
 Score Users: Your data is never sold, and is used as analytics to make Score more useful. You can view Score's Privacy Policy [here](https://getscore.app/privacy).
-
 Score currently uses Mixpanel to store its analytics. For details on Mixpanel's privacy policy, please click [here](https://mixpanel.com/legal/privacy-policy/).
 
 ## Common Properties
