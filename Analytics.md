@@ -1,6 +1,6 @@
 # Score Extension Analytics
 
-This file tracks all existing analytics that exist in the [Score browser extension](https://getscore.app), as of version 1.9.0 on the Chrome store. 
+This file tracks all existing analytics that exist in the [Score browser extension](https://getscore.app), as of version 2.0.0 on the Chrome store. 
 
 Score Users: Your data is never sold, and is used as analytics to make Score more useful. You can view Score's Privacy Policy [here](https://getscore.app/privacy).
 Score currently uses Mixpanel to store its analytics. For details on Mixpanel's privacy policy, please click [here](https://mixpanel.com/legal/privacy-policy/).
@@ -34,11 +34,17 @@ These are properties that are tracked for every event that is fired. These help 
 1. Example: `10.15.7`
 2. Description: User agent OS version
 
-### Score Extension Version
+### subscriptionId
+1. Example: `123-adc`
+2. Description: Score Pro Subscription ID
 
-1. Label: `extensionVersion`
-2. Example: `1.9.0`
-3. Description: Score extension version number
+### subscriptionActive
+1. Example: `true`
+2. Description: Whether current user is a Score Pro subscriber
+
+### extensionVersion
+1. Example: `1.9.0`
+2. Description: Score extension version number
 
 # Events
 
@@ -151,6 +157,30 @@ Fired when a user logs in to Score on the web, and the extension acknowledges it
 
 No additional properties are attached.
 
+## extension_setSubscriptionComplete
+
+Fired when a user subscribes to Score on the web, and the extension acknowledges it.
+
+No additional properties are attached.
+
+## extension_getSubscriptionActiveSuccess
+
+Fired when we check if a user's subscription is active successfully
+
+### active
+
+1. Example: `true`
+2. Description: Whether the subscription is active or not
+
+## extension_getSubscriptionActiveError
+
+Fired when we check if a user's subscription is active, and fails to check
+
+### errorString
+
+1. Example: `Error: Failed to fetch subscription from server`
+2. Description: Descriptive error string when the subscription status fails to be fetched
+
 ## extension_getToastSuccess
 
 Fired when new notifications are fetched from Score's servers successfully.
@@ -236,6 +266,15 @@ No additional properties are attached.
 Fired when user clicks the Score sidebar hover button on any product page.
 
 No additional properties are attached.
+
+## modal_openScoreProPage
+
+Fired when user clicks to visit the Score Pro page.
+
+### source
+
+1. Example: `screenshot`
+2. Description: Source that it came from (modal, screenshot, etc.)
 
 ## modal_openoptions
 
@@ -356,6 +395,10 @@ Fired when a user rates the current results that Score provides
 
 1. Example: `2`
 2. Description: Result type (Identical / Similar search)
+
+## modal_clickResultRedirect
+
+Same as modal_clickResult, but when a user is redirected to the Score Pro page.
 
 ## modal_filterResultsText
 
