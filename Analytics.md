@@ -1,410 +1,520 @@
 # Score Extension Analytics
 
-This file tracks all existing analytics that exist in the [Score browser extension](https://getscore.app), as of version 2.0.0 on the Chrome store. 
+This document tracks all analytics in the [Score browser extension](https://getscore.app), as of **version 3.0.1+** on the Chrome Web Store.
 
-Score Users: Your data is never sold, and is used as analytics to make Score more useful. You can view Score's Privacy Policy [here](https://getscore.app/privacy).
-Score currently uses Mixpanel to store its analytics. For details on Mixpanel's privacy policy, please click [here](https://mixpanel.com/legal/privacy-policy/).
+**Last Updated:** January 2026
+
+---
+
+## Privacy-First Commitment (Version 3.0 - January 2026)
+
+Score V3 represents our complete commitment to user privacy. We have **removed all personal data collection and link tracking** that existed in V2.
+
+### What Changed in V3:
+
+**NO LONGER COLLECTED:**
+- User agent / browser information
+- Operating system details
+- URLs or page locations
+- Image URLs
+- Product titles, prices, or details
+- Result counts or search timing
+- Click result details (title, price, URL)
+- Filter preferences
+- Search types
+
+**ONLY COLLECTED (minimal, non-identifiable data):**
+- `extensionVersion` - Current extension version number
+- `distinctId` - Anonymous user ID (Supabase user hash)
+- Subscription status (active/inactive, subscription type)
+- Error messages (for debugging and fixing bugs)
+
+---
+
+## Analytics Opt-Out
+
+**Users have complete control.** You can disable ALL analytics tracking:
+
+1. Open the Score modal on any product page
+2. Click the filter icon to open Settings
+3. Check **"Disable analytics tracking"**
+
+When enabled, **zero analytics events** are sent to Mixpanel. This preference is stored locally in your browser and never leaves your device.
+
+**Storage key:** `ANALYTICS-optOut` in `chrome.storage.local`
+
+---
+
+## What We Use Analytics For
+
+We use minimal analytics **only** to:
+- Understand which features are used (to prioritize development)
+- Identify bugs and errors (to fix problems faster)
+- Track subscription status (to provide Pro features)
+- Measure extension adoption (install/update counts)
+
+We **DO NOT** use analytics for:
+- Advertising or retargeting
+- Behavioral profiling
+- Selling or sharing data
+- Tracking your shopping or browsing history
+
+---
+
+## Third-Party Services
+
+**Mixpanel:** We use Mixpanel to store analytics events.
+- **Mixpanel Token:** `8f29c4724d93413d06968741ac2be51d`
+- **Mixpanel Privacy Policy:** [https://mixpanel.com/legal/privacy-policy/](https://mixpanel.com/legal/privacy-policy/)
+- **Data Retention:** Per Mixpanel's policy (30 days for event data)
+
+**Your Rights:**
+- You can opt-out of all tracking (see above)
+- You can request data deletion by emailing getscoreapp@gmail.com
+- You can view all analytics events in this document
+
+---
 
 ## Common Properties
 
-These are properties that are tracked for every event that is fired. These help us understand what browser and Score extension version a user is on, for debugging purposes.
-
-### userAgent
-
-1. Example: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`
-2. Description: User agent of a browser
-
-### userAgentBrowserName
-
-1. Example: `Chrome`
-2. Description: User agent browser name
-
-### userAgentBrowserVersion
-
-1. Example: `120.0.0.0`
-2. Description: User agent browser version
-
-### userAgentOSName
-
-1. Example: `Mac OS`
-2. Description: User agent OS name
-
-### userAgentOSVersion
-
-1. Example: `10.15.7`
-2. Description: User agent OS version
-
-### subscriptionId
-1. Example: `123-adc`
-2. Description: Score Pro Subscription ID
-
-### subscriptionActive
-1. Example: `true`
-2. Description: Whether current user is a Score Pro subscriber
+These properties are included with **every** event (when analytics is enabled):
 
 ### extensionVersion
-1. Example: `1.9.0`
-2. Description: Score extension version number
+- **Example:** `3.0.1`
+- **Description:** Score extension version number
+- **Why we collect it:** To identify which version users are on for debugging
 
-# Events
+### distinctId
+- **Example:** `a3f7b2c1...` (hashed)
+- **Description:** Anonymous user ID (Supabase user hash)
+- **Why we collect it:** To count unique users without identifying them
+- **Note:** This is a one-way hash that cannot be reversed to identify you
 
-## modal_performImageSearch
+### subscriptionActive
+- **Example:** `true` or `false`
+- **Description:** Whether you have an active Score Pro subscription
+- **Why we collect it:** To provide Pro features and track conversions
 
-Fired when the extension makes a search automatically.
+### subscriptionType
+- **Example:** `PRO_UNLIMITED` or `null`
+- **Description:** Your subscription plan type
+- **Why we collect it:** To deliver the correct features for your plan
 
-### windowLocationHref
+### subscriptionId
+- **Example:** `sub_1A2B3C...`
+- **Description:** Stripe subscription ID (if subscribed)
+- **Why we collect it:** To validate subscription status
 
-1. Example: `https://www.amazon.com/dp/B096X9LGJ1`
-2. Description: Current URL that the user is on
+---
 
-### imageUrl
+## Events Reference
 
-1. Example: `https://m.media-amazon.com/images/I/61A3ePViuoL._AC_SX679_.jpg`
-2. Description: Image, if any that helps with the search
+Below is every analytics event we track, organized by category.
 
-## modal_performImageSearchRightClick
+---
 
-Fired when the extension makes a search by a right-click initiation from the user.
+## Installation & Updates
 
-### windowLocationHref
+### extension_firstTimeOnboard
+**Fired when:** User installs the extension for the first time
 
-1. Example: `https://www.amazon.com/dp/B096X9LGJ1`
-2. Description: Current URL that the user is on
+**Additional Properties:** None
 
-### imageUrl
+**Why we track it:** To count new installations
 
-1. Example: `https://m.media-amazon.com/images/I/61A3ePViuoL._AC_SX679_.jpg`
-2. Description: Image, if any that helps with the search
+---
 
-## modal_performImageSearchCropSearch
+### extension_updateVersion
+**Fired when:** User updates the extension to a new version
 
-Fired when the extension makes a search by a crop search initiation from the user.
+**Additional Properties:** None
 
-### windowLocationHref
+**Why we track it:** To track update adoption rates
 
-1. Example: `https://www.amazon.com/dp/B096X9LGJ1`
-2. Description: Current URL that the user is on
+---
 
-### imageUrl
+## User Authentication
 
-1. Example: `https://m.media-amazon.com/images/I/61A3ePViuoL._AC_SX679_.jpg`
-2. Description: Image, if any that helps with the search
+### extension_setNewDistinctId
+**Fired when:** User signs in to Score on the web
 
-## extension_performImageSearchComplete
+**Additional Properties:**
+- `id` - User ID (hashed)
 
-Fired when the extension is done finding and aggregating results.
+**Why we track it:** To link web and extension accounts
 
-### windowLocationHref
+---
 
-1. Example: `https://www.amazon.com/dp/B096X9LGJ1`
-2. Description: Current URL that the user is on
+### extension_setUserError
+**Fired when:** Error occurs during user setup
 
-### searchType
+**Additional Properties:**
+- `errorString` - Error message
 
-1. Example: `default`
-2. Description: Type of search that user performed (default/automatic, right click or screenshot)
+**Why we track it:** To identify and fix sign-in bugs
 
-### identicalResultsLength
+---
 
-1. Example: `3`
-2. Description: Number of identical results returned by Score
+### extension_getUserAndSubscriptionDetails
+**Fired when:** Extension retrieves user and subscription details
 
-### similarResultsLength
+**Additional Properties:**
+- `userId` - User ID (hashed)
+- `subscriptionId` - Subscription ID
+- `subscriptionActive` - Boolean
+- `subscriptionType` - Plan type
 
-1. Example: `5`
-2. Description: Number of similar results returned by Score
+**Why we track it:** To confirm subscription sync
 
-### identicalResultsTimeTaken
+---
 
-1. Example: `5.0`
-2. Description: Time it took to find identical options
+## Subscription Events
 
-### similarResultsTimeTaken
+### extension_setSubscriptionComplete
+**Fired when:** Subscription setup completes in extension
 
-1. Example: `5.0`
-2. Description: Time it took to find similar options
+**Additional Properties:** None
 
-## extension_noSimilarResultsFound
+**Why we track it:** To verify subscription activation
 
-Fired when the extension cannot find any similar results.
+---
 
-No additional properties are attached.
+### extension_getSubscriptionActiveSuccess
+**Fired when:** Successfully checked if subscription is active
 
-## extension_firstTimeOnboard
+**Additional Properties:**
+- `active` - Boolean (true/false)
 
-Fired when a user installs the extension for the first time.
+**Why we track it:** To monitor subscription validation
 
-No additional properties are attached.
+---
 
-## extension_updateVersion
+### extension_getSubscriptionActiveError
+**Fired when:** Error checking subscription status
 
-Fired when a user updates the extension.
+**Additional Properties:**
+- `errorString` - Error message
 
-No additional properties are attached.
+**Why we track it:** To fix subscription checking bugs
 
-## extension_setNewDistinctId
+---
 
-Fired when a user logs in to Score on the web.
+## Search Events
 
-### id
+### modal_performImageSearch
+**Fired when:** User initiates an automatic image search
 
-1. Example: `123`
-2. Description: ID of Score user
+**Additional Properties:** None
 
-## extension_setUserComplete
+**Why we track it:** To count total searches
 
-Fired when a user logs in to Score on the web, and the extension acknowledges it.
+---
 
-No additional properties are attached.
+### modal_performImageSearchRightClick
+**Fired when:** User right-clicks an image and selects "Search with Score"
 
-## extension_setSubscriptionComplete
+**Additional Properties:** None
 
-Fired when a user subscribes to Score on the web, and the extension acknowledges it.
+**Why we track it:** To measure right-click feature usage
 
-No additional properties are attached.
+---
 
-## extension_getSubscriptionActiveSuccess
+### modal_performImageSearchCropSearch
+**Fired when:** User uses the screenshot/crop search feature
 
-Fired when we check if a user's subscription is active successfully
+**Additional Properties:** None
 
-### active
+**Why we track it:** To measure screenshot search usage
 
-1. Example: `true`
-2. Description: Whether the subscription is active or not
+---
 
-## extension_getSubscriptionActiveError
+### extension_performImageSearchComplete
+**Fired when:** Image search completes successfully
 
-Fired when we check if a user's subscription is active, and fails to check
+**Additional Properties:** None
 
-### errorString
+**Why we track it:** To track search success rate
 
-1. Example: `Error: Failed to fetch subscription from server`
-2. Description: Descriptive error string when the subscription status fails to be fetched
+---
 
-## extension_getToastSuccess
+### extension_imageSearchApiError
+**Fired when:** Error occurs during image search API call
 
-Fired when new notifications are fetched from Score's servers successfully.
+**Additional Properties:**
+- `errorString` - Error message
 
-### title
+**Why we track it:** To identify and fix search bugs
 
-1. Example: `Check Out Our Blog`
-2. Description: Title of the notification
+---
 
-### link
+## Search Limit Events
 
-1. Example: `https://blog.getscore.app`
-2. Description: Link that notification goes to when clicked from the extension
+### extension_dailyLimitReached
+**Fired when:** User hits daily search limit (10 for free users)
 
-## extension_getToastError
+**Additional Properties:**
+- `extendCount` - Number of extensions used
+- `extensionsExhausted` - Boolean (true if all 3 extensions used)
 
-Fired when new notifications fail to be fetched from Score's servers.
+**Why we track it:** To understand limit usage patterns
 
-### errorString
+---
 
-1. Example: `Error: Failed to fetch notification from server`
-2. Description: Descriptive error string when the toast fails to be fetched
+### extension_extendDailyLimit
+**Fired when:** User uses one of their 3 "One More Search" extensions
 
-## extension_getFeatureFlagsSuccess
+**Additional Properties:** None
 
-Fired when new feature flags are fetched from Score's servers successfully.
+**Why we track it:** To measure extension usage
 
-### featureFlags
+---
 
-1. Example: `{shouldEnableHoverButton: false}`
-2. Description: Feature flags that determine experiments within Score.
+## Modal Interaction Events
 
-## extension_getFeatureFlagsError
+### modal_openoptions
+**Fired when:** User clicks the "X cheaper options" button on a product page
 
-Fired when new feature flags fail to be fetched from Score's servers.
+**Additional Properties:**
+- `loading` - Boolean (whether results were still loading)
 
-### errorString
+**Why we track it:** To measure feature engagement
 
-1. Example: `Error: Failed to fetch notification from server`
-2. Description: Descriptive error string when the toast fails to be fetched
+---
 
-## modal_didYouFind_1_yes
+### sticky_openExtension
+**Fired when:** User clicks the floating Score button on a product page
 
-Fired when clicking Yes in the Did You Find modal after a user navigates back to Score from a product page.
+**Additional Properties:** None
 
-No additional properties are attached.
+**Why we track it:** To track sidebar usage
 
-## modal_didYouFind_1_no
+---
 
-Fired when clicking No in the Did You Find modal after a user navigates back to Score from a product page.
+### modal_closeExtension
+**Fired when:** User closes the Score modal
 
-No additional properties are attached.
+**Additional Properties:** None
 
-## modal_didYouFind_review_yes
+**Why we track it:** To track engagement duration
 
-Fired when clicking Yes in the Did You Find - Review modal after a user navigates back to Score from a product page.
+---
 
-No additional properties are attached.
+### modal_clickLogo
+**Fired when:** User clicks the Score logo in the modal
 
-## modal_didYouFind_review_later
+**Additional Properties:** None
 
-Fired when clicking Later in the Did You Find - Review modal after a user navigates back to Score from a product page.
+**Why we track it:** To track logo clicks
 
-No additional properties are attached.
+---
 
-## modal_didYouFind_2_no
+### modal_openScoreProPage
+**Fired when:** User clicks to open the Score Pro upgrade page
 
-Fired when clicking an option in the Did Not Find modal after a user navigates back to Score from a product page.
+**Additional Properties:**
+- `source` - Where the click came from (e.g., "modal", "screenshot")
 
-### option
+**Why we track it:** To measure upgrade page views and attribution
 
-1. Example: `Incorrect price`
-2. Description: Reason for why user did not find the right product using Score
+---
 
-## modal_closePostResults
+## Result Interaction Events
 
-Fired when a user closes the Did You Find Modal.
+### modal_clickResult
+**Fired when:** User clicks on a search result
 
-No additional properties are attached.
+**Additional Properties:** None
 
-## sticky_openExtension
+**Why we track it:** To measure result click-through rate
 
-Fired when user clicks the Score sidebar hover button on any product page.
+**Note:** In v2.0, this event included title, price, URL, and merchant. **In v3.0+, we collect NONE of that data.**
 
-No additional properties are attached.
+---
 
-## modal_openScoreProPage
+## Error Events
 
-Fired when user clicks to visit the Score Pro page.
+### modal_cannotFindImage
+**Fired when:** Extension cannot find an image to search
 
-### source
+**Additional Properties:** None
 
-1. Example: `screenshot`
-2. Description: Source that it came from (modal, screenshot, etc.)
+**Why we track it:** To identify pages where Score doesn't work
 
-## modal_openoptions
+---
 
-Fired when user clicks the Score '5 cheaper options' that is located on a product page.
+### modal_amazonCannotParseBox
+**Fired when:** Extension cannot parse Amazon product page
 
-### pageType
+**Additional Properties:** None
 
-1. Example: `amazon`
-2. Description: Page that a user is on
+**Why we track it:** To fix Amazon parsing bugs
 
-### cheaperResultsLength
+---
 
-1. Example: `5`
-2. Description: Number of cheaper results
+### modal_cannotParseJsonLd
+**Fired when:** Extension cannot parse JSON-LD product data
 
-### loading
+**Additional Properties:** None
 
-1. Example: `false`
-2. Description: Whether the page is still loading or not when button was clicked
+**Why we track it:** To fix product page parsing
 
-## modal_amazonCannotParseBox
+---
 
-Fired when Score is unable to parse an Amazon product page.
+### page_cannotLoadOnPageLoadOrChange
+**Fired when:** Generic error during page load or navigation
 
-No additional properties are attached.
+**Additional Properties:**
+- `errorName` - Type of error (e.g., "TypeError")
+- `errorMessage` - Error description
 
-## modal_cannotParseJsonLd
+**Why we track it:** To identify and fix page loading bugs
 
-Fired when Score is unable to parse a product page that has JSON-LD.
+---
 
-No additional properties are attached.
+## Notification Events
 
-## modal_cannotFindImage
+### extension_getToastSuccess
+**Fired when:** Extension successfully fetches a notification from Score's servers
 
-Fired when Score is unable to find an image on the current page.
+**Additional Properties:** None
 
-No additional properties are attached.
+**Why we track it:** To verify notification delivery
 
-## page_cannotLoadOnPageLoadOrChange
+---
 
-Fired when Score is unable to parse current page. Generic error.
+### extension_getToastError
+**Fired when:** Error fetching notification
 
-### errorName
+**Additional Properties:**
+- `errorString` - Error message
 
-1. Example: `TypeError`
-2. Description: Type of error that Score encountered while parsing
+**Why we track it:** To fix notification bugs
 
-### errorMessage
+---
 
-1. Example: `Unable to understand type on page`
-2. Description: Description message of error that Score encountered while parsing
+### extension_clickToast
+**Fired when:** User clicks on a notification
 
-## modal_rateResults
+**Additional Properties:** None
 
-Fired when a user rates the current results that Score provides
+**Why we track it:** To measure notification engagement
 
-### stars
+**Note:** In v2.0, this included notification title and link. **In v3.0+, we collect NONE of that data.**
 
-1. Example: `5`
-2. Description: Number of stars that a user rates
+---
 
-## extension_clickToast
+## Site Hiding Events
 
-Fired when a user clicks the notification toast within Score.
+### extension_hideSite
+**Fired when:** User disables Score on a specific website
 
-### title
+**Additional Properties:** None
 
-1. Example: `Check Out Our Blog`
-2. Description: Title of the notification
+**Why we track it:** To understand which sites users hide Score on
 
-### link
+**Note:** We do NOT track which specific site was hidden (no URLs collected)
 
-1. Example: `https://blog.getscore.app`
-2. Description: Link that notification goes to when clicked from the extension
+---
 
-## modal_clickLogo
+### extension_unhideSite
+**Fired when:** User re-enables Score on a previously hidden site
 
-Fired when a user clicks the Score logo within the extension.
+**Additional Properties:** None
 
-No additional properties are attached.
+**Why we track it:** To track re-enablement
 
-## modal_closeExtension
+---
 
-Fired when a user closes the Score popup window.
+### extension_unhideAllSites
+**Fired when:** User re-enables Score on all hidden sites
 
-No additional properties are attached.
+**Additional Properties:** None
 
-## modal_clickManufacturerSite
+**Why we track it:** To track bulk re-enablement
 
-Fired when a user clicks through to the manufacturer's site in the result list.
-No additional properties are attached.
+---
 
-## modal_clickResult
+## Event Flow Example
 
-Fired when a user rates the current results that Score provides
+Here's what happens when you use Score:
 
-### title
+```
+1. Install Extension
+   → extension_firstTimeOnboard
 
-1. Example: `Vera Dress`
-2. Description: Title of the result
+2. Sign In on Website
+   → extension_setNewDistinctId
+   → extension_getUserAndSubscriptionDetails
 
-### urlTitle
+3. Visit Product Page
+   → modal_performImageSearch
+   → extension_performImageSearchComplete
 
-1. Example: `asos.com`
-2. Description: Merchant name of the result
+4. Click Floating Button
+   → sticky_openExtension
 
-### price
+5. Click a Result
+   → modal_clickResult
 
-1. Example: `US$9.40`
-2. Description: Price of the result
+6. Close Modal
+   → modal_closeExtension
+```
 
-### url
+**Total data points collected:** 6 events with only version, anonymous ID, and subscription status.
 
-1. Example: `https://www.asos.com/au/vero-moda/vero-moda-wrap-midi-dress-with-flutter-sleeves-in-pink/prd/204532007`
-2. Description: Link of the product that was clicked
+**What we DON'T know:**
+- What product you searched for
+- What website you were on
+- What result you clicked
+- How much it cost
+- Where you bought it
 
-### type
+---
 
-1. Example: `2`
-2. Description: Result type (Identical / Similar search)
+## Version History
 
-## modal_clickResultRedirect
+### Version 3.0.1+ (January 2026)
+**Privacy-First Redesign**
+- Removed all URLs, images, product details, result data
+- Removed user agent and browser info
+- Removed timing and performance metrics
+- Added complete analytics opt-out
+- Reduced to minimal, non-identifiable data only
 
-Same as modal_clickResult, but when a user is redirected to the Score Pro page.
+### Version 2.0.0 (2024)
+**Previous Analytics**
+- Tracked URLs, images, search results, clicks
+- Collected user agent, browser version, OS
+- Measured result counts and timing
+- Much more invasive data collection
 
-## modal_filterResultsText
+### Version 1.x (2023)
+**Initial Release**
+- Similar to v2.0 tracking model
 
-Fired when a user filters the results with text.
+---
 
-### filterText
+## Contact & Questions
 
-1. Example: `asos`
-2. Description: Filter text that a user types
+**Have privacy concerns?** We're here to listen.
+
+- **Email:** getscoreapp@gmail.com
+- **Reddit:** [r/ScoreApp](https://www.reddit.com/r/ScoreApp/)
+- **X (Twitter):** [@GetScoreApp](https://x.com/GetScoreApp)
+
+**Want to verify this?**
+- View the extension source code (it's packaged with the extension)
+- Check network requests in Chrome DevTools
+- Enable analytics opt-out and confirm zero Mixpanel requests
+
+---
+
+## Related Documents
+
+- **Privacy Policy:** [https://getscore.app/privacy](https://getscore.app/privacy)
+- **Terms of Service:** [https://getscore.app/terms](https://getscore.app/terms)
+- **Chrome Web Store:** [Score Extension](https://chrome.google.com/webstore/detail/score-app-find-great-deal/bcppghiggoobhkjlkfpmonlcigffpime)
+
+---
+
+**Summary:** Score V3 collects the absolute minimum data needed to operate and fix bugs. Your shopping activity is private. We don't track, sell, or share your browsing history. Period.
